@@ -31,6 +31,8 @@ namespace MahApps.Metro.Controls
         public static readonly DependencyProperty WindowTransitionsEnabledProperty = DependencyProperty.Register("WindowTransitionsEnabled", typeof(bool), typeof(MetroWindow), new PropertyMetadata(true));
 
         bool isDragging;
+        ContentPresenter WindowCommandsPresenter;
+        UIElement titleBar;
 
         public bool WindowTransitionsEnabled
         {
@@ -157,9 +159,9 @@ namespace MahApps.Metro.Controls
             if (WindowCommands == null)
                 WindowCommands = new WindowCommands();
 
-            var titleBar = GetTemplateChild(PART_TitleBar) as UIElement;
+            titleBar = GetTemplateChild(PART_TitleBar) as UIElement;
 
-            if (ShowTitleBar && titleBar != null)
+            if (titleBar != null && titleBar.Visibility == System.Windows.Visibility.Visible)
             {
                 titleBar.MouseDown += TitleBarMouseDown;
                 titleBar.MouseUp += TitleBarMouseUp;
@@ -248,7 +250,7 @@ namespace MahApps.Metro.Controls
                 double left = mouseAbsolute.X - width / 2;
 
                 // Check if the mouse is at the top of the screen if TitleBar is not visible
-                if (!ShowTitleBar && mouseAbsolute.Y > TitlebarHeight)
+                if (!(titleBar.Visibility == System.Windows.Visibility.Visible) && mouseAbsolute.Y > TitlebarHeight)
                     return;
 
                 // Aligning window's position to fit the screen.
